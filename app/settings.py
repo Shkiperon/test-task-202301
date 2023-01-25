@@ -8,13 +8,21 @@ ALLOWED_EXTENSIONS = {'txt', 'csv'}
 max_lines = 1
 trunk_name = 'PJSIP_GW'
 
-MYSQL_IP = '127.0.0.1'
-MYSQL_PORT = 3306
-MYSQL_USER = 'mysql_user'
-MYSQL_PASS = 'mysql_pass'
-MYSQL_DB = 'autocalls'
+MYSQL_CONN = {
+    'host': '127.0.0.1',
+    'port': 3306,
+    'user': 'mysql_user',
+    'password': 'mysql_pass',
+    'database': 'autocalls'
+}
 
-AMI_SRV = 'asterisk.example.lan'
-AMI_USER = 'ami_user'
-AMI_PASS = 'ami_pass'
+AMI_CONN = {
+    'address': 'asterisk.example.lan',
+    'port': 5038,
+    'timeout': 60
+}
+AMI_CREDS = {
+    'username': 'ami_user',
+    'secret': 'ami_pass'
+}
 

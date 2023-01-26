@@ -68,7 +68,9 @@ class MysqlQueries():
             return sql1.success
         #Second query - mark task as manually stopped at some datestamp
         query2 = f"""
-        UPDATE autocalls_tasks SET task_stopped=NOW() WHERE task_id={task_id}
+        UPDATE autocalls_tasks
+        SET task_stopped=NOW()
+        WHERE task_id={task_id}
         """
         sql2 = MysqlCTL()
         sql2.do_query(query2, False)

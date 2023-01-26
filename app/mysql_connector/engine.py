@@ -7,7 +7,6 @@ from settings import MYSQL_CONN
 class MysqlCTL():
     __slots__ = [
         '_config',
-        '_query_types',
         'result',
         'success',
         'err_info'
@@ -19,7 +18,7 @@ class MysqlCTL():
         self.success = False
         self.err_info = None
 
-    def _do_query(self, is_select: bool, query: str):
+    def do_query(self, query: str, is_select: bool):
         try:
             with closing(mysqlconn.connect(**self._config)) as _connect:
                 sql = _connect.cursor(dictionary=True)
@@ -29,22 +28,12 @@ class MysqlCTL():
                     self.success = True
                 else:
                     _connect.commit()
+                    affected_rows = sql.rowcount
+                    if (affected_rows > 0):
+                        self.success = True
+                    else:
+                        self.err_info = 'affected 0 rows'
                 sql.close()
         except Exception as ex:
             self.err_info = f'SQL error\r\n{query}\r\n{ex}'.strip()
-            print(self.err_info)
-
-    def ins_new_task(self):
-        pass
-
-    def ins_task_element(self):
-        pass
-
-    def sel_idle_task_element(self):
-        pass
-
-    def upd_stop_task(self):
-        #First query - mark unstarted task elements to skip execution
-        #Second query - mark task as manually stopped at some datestamp
-        pass
 

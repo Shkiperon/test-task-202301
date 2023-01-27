@@ -1,21 +1,20 @@
 import mysql.connector as mysqlconn
 from contextlib import closing
+from typing import Optional, Any
 
 from settings import MYSQL_CONN
 
 
 class MysqlCTL():
-    __slots__ = [
-        '_config',
-        'result',
-        'success',
-        'err_info'
-    ]
+    _config: dict
+    success: bool
+    result: Optional[Any]
+    err_info: Optional[str]
 
     def __init__(self):
         self._config = MYSQL_CONN
-        self.result = None
         self.success = False
+        self.result = None
         self.err_info = None
 
     def do_query(self, query: str, is_select: bool):

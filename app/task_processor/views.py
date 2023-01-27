@@ -11,7 +11,7 @@ task_processor_bp.add_url_rule(
     methods=['POST', ]
 )
 task_processor_bp.add_url_rule(
-    '/autocall/stop/<integer:task_id>',
+    '/autocall/stop/<taskUUID:task_id>',
     view_func=task_processor_view,
     methods=['DELETE', ]
 )

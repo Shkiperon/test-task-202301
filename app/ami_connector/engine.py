@@ -5,9 +5,7 @@ from settings import AMI_CONN, AMI_CREDS
 
 
 class AsteriskCTL():
-    __slots__ = [
-        "client"
-    ]
+    client: AMIClient
 
     def __init__(self):
         self.client = AMIClient(**AMI_CONN)

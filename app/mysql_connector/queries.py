@@ -57,6 +57,38 @@ class MysqlQueries():
             self.err_info = sql.err_info
         return sql.success
 
+    def upd_timefield_of_call(self, call_id: int, field_name: str):
+        self.result = None
+        self.err_info = None
+        query = f"""
+        UPDATE autocalls
+        SET {field_name}=NOW()
+        WHERE id={call_id} and {field_name} IS NULL
+        """
+        sql = MysqlCTL()
+        sql.do_query(query, False)
+        if sql.success:
+            self.result = sql.result
+        elif sql.err_info != 'affected 0 rows':
+            self.err_info = sql.err_info
+        return sql.success
+
+    def upd_mark_call_as_finished(self, call_id: int, call_status: str):
+        self.result = None
+        self.err_info = None
+        query = f"""
+        UPDATE autocalls
+        SET call_finished=NOW(), call_status='{call_status}'
+        WHERE id={call_id} and call_finished IS NULL
+        """
+        sql = MysqlCTL()
+        sql.do_query(query, False)
+        if sql.success:
+            self.result = sql.result
+        elif sql.err_info != 'affected 0 rows':
+            self.err_info = sql.err_info
+        return sql.success
+
     def upd_mark_stop_calls(self, task_id: UUID) -> bool:
         self.result = None
         self.err_info = None

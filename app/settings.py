@@ -6,7 +6,7 @@ UPLOAD_FOLDER = '/opt/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
 max_lines = 1
-trunk_name = 'PJSIP_GW'
+trunk_name = '1111'
 
 MYSQL_CONN = {
     'host': '127.0.0.1',
@@ -17,7 +17,7 @@ MYSQL_CONN = {
 }
 
 AMI_CONN = {
-    'address': 'asterisk.example.lan',
+    'address': '127.0.0.1',
     'port': 5038,
     'timeout': 60
 }

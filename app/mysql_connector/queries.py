@@ -46,7 +46,7 @@ class MysqlQueries():
         query = f"""
         SELECT id as call_id, task_id, call_number, call_name
         FROM autocalls
-        WHERE call_status IS NULL AND call_started IS NULL
+        WHERE call_status IS NULL
         HAVING MIN(id)
         """
         sql = MysqlCTL()
@@ -57,7 +57,23 @@ class MysqlQueries():
             self.err_info = sql.err_info
         return sql.success
 
-    def upd_timefield_of_call(self, call_id: int, field_name: str):
+    def upd_take_idle_call_id(self, call_id: int) -> bool:
+        self.result = None
+        self.err_info = None
+        query = f"""
+        UPDATE autocalls
+        SET call_status='QUEUED'
+        WHERE id={call_id} and call_status IS NULL
+        """
+        sql = MysqlCTL()
+        sql.do_query(query, False)
+        if sql.success:
+            self.result = sql.result
+        elif sql.err_info != 'affected 0 rows':
+            self.err_info = sql.err_info
+        return sql.success
+
+    def upd_timefield_of_call(self, call_id: int, field_name: str) -> bool:
         self.result = None
         self.err_info = None
         query = f"""
@@ -73,7 +89,7 @@ class MysqlQueries():
             self.err_info = sql.err_info
         return sql.success
 
-    def upd_mark_call_as_finished(self, call_id: int, call_status: str):
+    def upd_mark_call_as_finished(self, call_id: int, call_status: str) -> bool:
         self.result = None
         self.err_info = None
         query = f"""
@@ -95,7 +111,7 @@ class MysqlQueries():
         query = f"""
         UPDATE autocalls
         SET call_status='TASK_STOPPED', call_finished=NOW()
-        WHERE task_id={task_id} AND call_started IS NULL
+        WHERE task_id={task_id} AND call_status IS NULL
         """
         sql = MysqlCTL()
         sql.do_query(query, False)
@@ -109,7 +125,7 @@ class MysqlQueries():
         query = f"""
         UPDATE autocalls_tasks
         SET task_stopped=NOW()
-        WHERE task_id={task_id}
+        WHERE task_id={task_id} AND task_stopped IS NULL
         """
         sql = MysqlCTL()
         sql.do_query(query, False)

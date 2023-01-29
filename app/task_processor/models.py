@@ -18,6 +18,7 @@ class ParseFileAndSaveToDB():
 
     def __init__(self, full_filepath: str):
         self._filepath = full_filepath
+        self.task_elements = {}
         
     def parse_file(self) -> bool:
         self.err_message = None
@@ -26,7 +27,7 @@ class ParseFileAndSaveToDB():
         for line in file:
             if line == '':
                 continue
-            line_match = re.match(r'^(\w);(\d)$', line)
+            line_match = re.match(r'^(\w+);(\d+)$', line)
             if line_match is not None:
                 self.task_elements[line_match.group(2)] = line_match.group(1)
                 list_numbers.append(line_match.group(2))
@@ -106,8 +107,7 @@ class ResponseTaskProcessor():
         return json.dumps(
             self,
             default=lambda o: o.__dict__,
-            sort_keys=True,
-            ident=4
+            sort_keys=True
         )
 
     def toResponse(self, http_code: int = 200):

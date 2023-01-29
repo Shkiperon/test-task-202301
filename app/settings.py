@@ -2,18 +2,18 @@ import os
 
 SECRET_KEY = os.urandom(32)
 MAX_CONTENT_LENGTH = 1 * 1024 * 1024
-UPLOAD_FOLDER = '/opt/uploads'
+UPLOAD_FOLDER = '/app/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
 max_lines = 1
 trunk_name = '1111'
 
 MYSQL_CONN = {
-    'host': '127.0.0.1',
+    'host': 'mysql',
     'port': 3306,
     'user': 'mysql_user',
     'password': 'mysql_pass',
-    'database': 'autocalls'
+    'database': 'calls'
 }
 
 AMI_CONN = {

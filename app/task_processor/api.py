@@ -3,9 +3,9 @@ from flask.views import MethodView
 from flask import request
 from uuid import uuid4, UUID
 
+from settings import UPLOAD_FOLDER
 from task_processor.models import allowed_file, ResponseTaskProcessor, \
     ParseFileAndSaveToDB, StopTaskWithCalls
-from application import app
 
 
 class TaskProcessor(MethodView):
@@ -21,7 +21,7 @@ class TaskProcessor(MethodView):
             return http_response.toResponse(400)
         if file and allowed_file(filename):
             task_id = uuid4()
-            target_full_filepath = os.path.join(app.config['UPLOAD_FOLDER'], f"{task_id}.{filename.rsplit('.', 1)[1].lower()}")
+            target_full_filepath = os.path.join(UPLOAD_FOLDER, f"{task_id}.{filename.rsplit('.', 1)[1].lower()}")
             file.save(target_full_filepath)
             parser = ParseFileAndSaveToDB(target_full_filepath)
             if not parser.parse_file():

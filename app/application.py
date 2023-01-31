@@ -6,7 +6,7 @@ from queue import Queue
 from settings import max_lines
 from task_processor.views import task_processor_bp
 from app_threads.background_workers import FillQueueWorker, CallWorker
-from ami_connector.engine import AsteriskBase, AsteriskListener
+from ami_connector.engine import AsteriskListener
 
 
 class TaskUUID(BaseConverter):
@@ -24,8 +24,10 @@ app.url_map.converters['taskUUID'] = TaskUUID
 
 app.register_blueprint(task_processor_bp)
 
-ami_listener = AsteriskBase()
-ami_listener.client.add_event_listener(AsteriskListener())
+ami_listener = AsteriskListener()
+
+# prev AsteriskListener doesnt work
+# ami_listener.client.add_event_listener(AsteriskListener())
 
 #Maybe redefine maxsize as 'int(max_lines*1.3)'?
 CALLTASKS_QUEUE = Queue(maxsize=max_lines)

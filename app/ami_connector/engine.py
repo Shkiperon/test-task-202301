@@ -9,13 +9,16 @@ from settings import AMI_CONN, AMI_CREDS, trunk_name
 from mysql_connector.queries import MysqlQueries
 
 
-class AsteriskListener(EventListener):
-    _dict_calls: dict
+class AsteriskListener():
+    client: AMIClient
 
     def __init__(self):
         self._dict_calls = {}
+        self.client = AMIClient(**AMI_CONN)
+        self.client.login(**AMI_CREDS)
+        self.client.add_event_listener(self._event_listener)
     
-    def on_event(self, event: Event, **kwargs):
+    def _event_listener(self, event: Event, **kwargs):
         print(f'[{datetime.now()}]: {event.name} - {event.keys}')
         if event.name == 'VarSet' and event.keys['Variable'] == 'call_id':
             logging.info(f'{datetime.now()}')
@@ -43,14 +46,6 @@ class AsteriskListener(EventListener):
                 logging.error(f'Unable to save datetime when call_id {self._dict_calls[event.keys["Linkedid"]]} finished (linked_id {event.keys["Linkedid"]})')
             del sql
             del self._dict_calls[event.keys["Linkedid"]]
-
-
-class AsteriskBase():
-    client: AMIClient
-
-    def __init__(self):
-        self.client = AMIClient(**AMI_CONN)
-
 
 class AsteriskCTL():
     client: AMIClient

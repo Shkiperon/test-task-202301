@@ -51,8 +51,8 @@ class MysqlQueries():
         """
         sql = MysqlCTL()
         sql.do_query(query, True)
-        if sql.success:
-            self.result = sql.result
+        if sql.success and sql.result:
+            self.result = sql.result[0]
         else:
             self.err_info = sql.err_info
         return sql.success
